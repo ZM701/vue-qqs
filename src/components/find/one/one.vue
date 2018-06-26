@@ -27,7 +27,7 @@
         'v-article':article
     },
     mounted(){
-//        console.log()
+        console.log()
     }
   }
 </script>
