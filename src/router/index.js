@@ -9,8 +9,11 @@ import two from '@/components/find/two/two';
 import three from '@/components/find/three/three';
 import four from '@/components/find/four/four';
 import five from '@/components/find/five/five';
-/*import nav from '@/components/find/nav/nav';
-import swiper from '@/components/find/swiper/swiper';*/
+import exchangeGoods from '@/components/tasks/exchangeGoods/exchangeGoods';
+import profitStrategy from '@/components/tasks/profitStrategy/profitStrategy';
+
+
+
 
 Vue.config.productionTip = false;
 
@@ -18,6 +21,7 @@ Vue.config.productionTip = false;
 Vue.use(Router)
 
 export default new Router({
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -28,11 +32,11 @@ export default new Router({
       name: 'find',
       component: find,
       children:[
-        { path: '/find/one', name:'one', component: one},
-        { path: '/find/two', name:'two', component: two},
-        { path: '/find/three', name:'three', component: three},
-        { path: '/find/four', name:'four', component: four},
-        { path: '/find/five', name:'five', component: five}
+        { path: 'one', name:'one', component: one},
+        { path: 'two', name:'two', component: two},
+        { path: 'three', name:'three', component: three},
+        { path: 'four', name:'four', component: four},
+        { path: 'five', name:'five', component: five}
       ],
     },
     {
@@ -43,7 +47,11 @@ export default new Router({
     {
       path: '/tasks',
       name: 'tasks',
-      component: tasks
-    }
+      component: tasks,
+      children:[
+        { path: 'exchangeGoods', name:'exchangeGoods', component: exchangeGoods},
+        { path: 'profitStrategy', name:'profitStrategy', component: profitStrategy}
+      ],
+    },
   ]
 })

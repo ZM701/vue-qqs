@@ -1,13 +1,17 @@
 <template>
-  <div class="swiper-box">
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in list">
-          <keep-alive>
-            <component :is="item.component" :userInfo="item.userInfo" :msg="item.msg"></component>
-          </keep-alive>
+  <div>
+    <div class="swiper-box">
+      <pull-to :bottom-load-method="loadMore">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item, index) in list">
+              <keep-alive>
+                <component :is="item.component" :userInfo="item.userInfo" :msg="item.msg" :banner="item.banner"></component>
+              </keep-alive>
+            </div>
+          </div>
         </div>
-      </div>
+      </pull-to>
     </div>
   </div>
 </template>
@@ -19,6 +23,7 @@
   import four from '../four/four.vue';
   import five from '../five/five.vue';
   import Swiper from 'swiper';
+  import PullTo from 'vue-pull-to';
   import 'swiper/dist/css/swiper.min.css';
   import 'swiper/dist/js/swiper.js';
   import qs from 'qs';
@@ -26,7 +31,7 @@
   export default {
     data() {
       return {
-          //传递数据
+        //传递数据
         list: [
           {path: '/find/one', component: one},
           {path: '/find/two', component: two},
@@ -35,8 +40,11 @@
           {path: '/find/five', component: five}
         ],
         navList:["关注","精选"],//初始化的导航列表
-        keyWords:"关注",
+        keyWords:"",  //关键词
         attentionArticle:[],  //获取文章信息
+        nowIndex:0,   //当前索引的下标
+        banner:[],   //精选部分banner图的数据
+        pageNum:1,   //分页
       }
     },
     components: {
@@ -44,12 +52,16 @@
       two,
       three,
       four,
-      five
+      five,
+      PullTo
     },
     created(){
       //接收从nav组件中传递的数据
       this.$root.eventHub.$on('keyWords', (keyWords) => {
         this.keyWords = keyWords;
+      });
+      this.$root.eventHub.$on('nowIndex', (nowIndex) => {
+        this.nowIndex = nowIndex;
       });
     },
     mounted() {
@@ -66,29 +78,30 @@
         mySwiper.slideTo(index, 0, false);
       });
       //----------------------------调用相关事件-------------------------------------------
-      this.dataInit();   //页面初始化数据
+      this.judge();  //确定关键词
     },
     methods:{
+        //通过路由来指定关键词
       judge(){
-        if(this.$route.path == '/index/one' || this.$route.path == '/index'){
+        if(this.$route.path == '/find/one' || this.$route.path == '/find'){
           this.keyWords='关注'
-        }else if(this.$route.path == '/index/two'){
+        }else if(this.$route.path == '/find/two'){
           this.keyWords='精选'
         }
       },
       //页面初始化
       dataInit() {
-          console.log(this.keyWords)
         this.$http.post('/api/article/index', qs.stringify({
           uid: uid,
           keywords: this.keyWords,
-          pageNum: 1,
+          pageNum: this.pageNum,
           pageSize: 10
         })).then((response) => {
-          if(this.keyWords=="关注"){
+            //根据关键词判断获取文章内容的信息
+          if(this.nowIndex==0){
             var temp = response.data.article;
             this.attentionArticle = this.attentionArticle.concat(temp);
-          }else if(this.keyWords=="精选"){
+          }else if(this.nowIndex==1){
             var temp = response.data.article;
             this.attentionArticle = this.attentionArticle.concat(temp);
           }else{
@@ -100,30 +113,51 @@
             //1.补充导航栏
           var nav = [];
           for(var i=0;i<response.data.column.length;i++){
-              nav.push(response.data.column[i].column_name)
+            nav.push(response.data.column[i].column_name)
           }
           this.navList = this.navList.concat(nav);
           //将导航部分发射到nav组件
           this.$root.eventHub.$emit('navList', this.navList);
+
+          // banner图的操作
+          if(response.data.banner != "undefined"){
+            this.banner = response.data.banner;  //精选部分的banner图
+          }
           /**
            * 获取数据
            */
-          //1.初始化每个list里面msg的内容
+            //1.初始化每个list里面msg的内容
+//          var self = this
           for(var i=0;i<this.list.length;i++){
-            this.list[i].userInfo = response.data.user;  //获取关注列表的用户信息
-            this.list[i].msg = this.attentionArticle;
+            this.$set(this.list[i], 'userInfo', response.data.user)
+            this.$set(this.list[i], 'msg', this.attentionArticle)
+            this.$set(this.list[i], 'banner', this.banner)
           }
+
         })
-        console.log(this.list)
+
+      },
+      //上拉加载
+      loadMore(loaded) {
+        setTimeout(() => {
+          if(this.nowIndex==0){
+            this.pageNum = this.pageNum+1;
+          }else if(this.nowIndex==1){
+            this.pageNum = this.pageNum+1;
+          }else{
+            this.pageNum = 1;
+          }
+          this.dataInit();
+          loaded('done');
+        }, 500);
       },
     },
     watch:{
-      '$route' (to,from) {
-        this.judge();
-        this.dataInit();
-      },
       keyWords(val, oldVal){//普通的watch监听
+        //console.log(document.documentElement.scrollTop||document.body.scrollTop)
+        this.pageNum = 1;  //每次改变的时候初始化
         this.dataInit();  //初始化数据，并在关键词改变的时候调用
+        this.attentionArticle=[]; //清空存储的文章的信息
       },
     }
   }
@@ -131,10 +165,9 @@
 
 <style scoped>
   .swiper-box{
-    margin-top: 100px;
-    /*position: absolute;
+    position: absolute;
     width: 100%;
     top: 100px;
-    bottom: 50px;*/
+    bottom: 50px;
   }
 </style>

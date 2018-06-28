@@ -53,4 +53,32 @@ export default {
   .router-link-active span{
     color: green;
   }
+  /*删除对话框*/
+  .el-message-box {
+    display: inline-block;
+    width: 100% !important;
+    padding-bottom: 10px;
+    vertical-align: middle;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #ebeef5;
+    font-size: 18px;
+    -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    text-align: left;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .el-input {
+    width: 68% !important;
+  }
+  .el-message--success{
+    padding-left: 20% !important;
+    width: 100% !important;
+    top:50% !important;
+  }
+  .el-input{
+    width: 100% !important;
+  }
 </style>

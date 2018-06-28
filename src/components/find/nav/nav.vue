@@ -66,6 +66,8 @@
         this.keyWords = $(".item").eq(index).text();
         //发射得到的关键字
         this.$root.eventHub.$emit('keyWords', this.keyWords);
+        //发射选中索引的下标
+        this.$root.eventHub.$emit('nowIndex', this.nowIndex);
       }
     }
   }
