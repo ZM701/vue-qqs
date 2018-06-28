@@ -24,6 +24,18 @@ global.user_token='X1RcVlpEV1tTQ2BuW19BYgMbFnJFO1IPGwACUw0bAwBcBkldVVYHFFICWFhRV
 global.uuid='fb72ae37-5db8-31ee-8c0f-f39a7afa1f46'
 global.session_id='47698c15fb83a1e5bb1400accbb17f82'
 
+//全局函数
+Vue.prototype.burialPoint = function (params){//changeData是函数名
+  this.$http.get("/point", {
+    params: params
+  }).then(response => {
+    console.log(response.status)
+  }, response => {
+    console.log("获取信息失败");
+    console.log(response);
+  })
+}
+
 //引入mint-ui
 import 'mint-ui/lib/style.css';
 import 'mint-ui/lib/index.js';

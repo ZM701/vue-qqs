@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import exchangeDetail from '../../common/exchangeDetail/exchangeDetail'
+  import exchangeDetail from '../exchangeDetail/exchangeDetail'
   import PullTo from 'vue-pull-to';
     export default {
       components:{
@@ -52,8 +52,8 @@
         //点击跳转到任务
         goTask(){
           this.$router.push({
-            path: '/task',
-            name: 'task',
+            path: '/tasks',
+            name: 'tasks',
             params: {
             }
           })
@@ -63,6 +63,13 @@
 </script>
 
 <style scoped>
+  a,span{
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #000;
+    text-align: center;
+  }
   .exchange_box{
     width: 100%;
     position: absolute;

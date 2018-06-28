@@ -60,7 +60,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import VueRouter from 'vue-router';
   import qs from 'qs'
   import exchangeDetail from '../common/exchangeDetail/exchangeDetail.vue'
   export default {
@@ -82,15 +81,13 @@
     methods:{
       //跳转到赚钱攻略
       profitStrategy(){
-        let router = new VueRouter();
-        let href = '/tasks/profitStrategy'
-       /*   this.$router.push({
-          path: '/tasks/profitStrategy',
+          this.$router.push({
+          path: '/profitStrategy',
           name: 'profitStrategy',
           params: {
           }
-        })*/
-        router.push(href);
+        })
+
       },
       //页面请求
       taskInt(){

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div><router-view></router-view></div>
-    <div class="footer">
+    <div class="footer" v-show="this.$route.path=='/find'||this.$route.path=='/activities'||this.$route.path=='/tasks'||this.$route.path=='/find/one'||this.$route.path=='/find/two'||this.$route.path=='/find/three'||this.$route.path=='/find/four'||this.$route.path=='/find/five'">
       <div><router-link to="/find"><span><i class="	glyphicon glyphicon-search"></i></span><span>发现</span></router-link></div>
       <div><router-link to="/activities"><span><i class="glyphicon glyphicon-fullscreen"></i></span><span>活动</span></router-link></div>
       <div><router-link to="/tasks"><span><i class="glyphicon glyphicon-folder-open"></i></span><span>任务</span></router-link></div>
@@ -81,4 +81,11 @@ export default {
   .el-input{
     width: 100% !important;
   }
+  /*.content1 img{
+    width: 100% !important;
+  }
+  .content1 span{
+    text-align: left !important;
+    display: inline;
+  }*/
 </style>

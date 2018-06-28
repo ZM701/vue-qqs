@@ -55,8 +55,8 @@
         // 返回到上一层
         goback() {
           this.$router.push({
-            path: '/task',
-            name: 'task',
+            path: '/tasks',
+            name: 'tasks',
           })
         },
         //文章

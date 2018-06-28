@@ -42,7 +42,7 @@
       methods:{
         exchangeGoods(){
           this.$router.push({
-            path: '/tasks/exchangeGoods',
+            path: '/exchangeGoods',
             name: 'exchangeGoods',
             params: {
               money:this.money
