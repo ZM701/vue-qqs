@@ -200,6 +200,9 @@
   }
 </script>
 <style>
+  #search{
+    width: 100%;
+  }
   a,span{
     display: block;
     width: 100%;
